@@ -36,7 +36,7 @@ test('Pet type name is required validation', async ({ page }) => {
     await page.getByRole('button', { name: 'Edit' }).nth(2).click();
     await page.locator('#name').click()
     await page.locator('#name').clear()
-    await expect(page.getByText('Name is required')).toHaveText('Name is required')
+    await expect(page.locator('.help-block')).toHaveText('Name is required')
     await page.getByRole('button', { name: 'Update' }).click()
     await expect(page.getByRole('heading')).toHaveText('Edit Pet Type')
     await page.getByRole('button', { name: 'Cancel' }).click()
