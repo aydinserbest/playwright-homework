@@ -9,8 +9,7 @@ test('Update pet type', async ({ page }) => {
     await page.getByRole('button', { name: 'Edit' }).first().click();
     await expect(page.getByRole('heading')).toHaveText('Edit Pet Type')
     const petNameInputField = page.locator('#name')
-    await petNameInputField.click()
-    await petNameInputField.clear()
+    await expect(petNameInputField).toHaveValue('cat')
     await petNameInputField.fill('rabit')
     await page.getByRole('button', { name: 'Update' }).click()
     await expect(page.locator('input[name="pettype_name"]').first()).toHaveValue('rabit');
@@ -26,8 +25,7 @@ test('Cancel pet type update', async ({ page }) => {
     await expect(page.getByRole('heading')).toHaveText('Pet Types')
     await page.getByRole('button', { name: 'Edit' }).nth(1).click()
     const petNameInputField = page.locator('#name')
-    await petNameInputField.click()
-    await petNameInputField.clear()
+    await expect(petNameInputField).toHaveValue('dog')
     await petNameInputField.fill('moose')
     await expect(page.locator('#name')).toHaveValue('moose');
     await page.getByRole('button', { name: 'Cancel' }).click();
