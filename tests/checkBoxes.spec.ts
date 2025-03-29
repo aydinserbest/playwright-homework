@@ -11,7 +11,7 @@ test('Validate selected specialties', async ({ page }) => {
     await page.locator('tr', { hasText: "Helen Leary" }).getByRole('button', { name: 'Edit Vet' }).click()
     const selectedSpecialtiesField = page.locator('.selected-specialties');
     await expect(selectedSpecialtiesField).toHaveText('radiology');
-    await page.locator('.selected-specialties').click()
+    await selectedSpecialtiesField.click()
     await expect(page.getByLabel('radiology')).toBeChecked()
     await expect(page.getByLabel('surgery')).not.toBeChecked()
     await expect(page.getByLabel('dentistry')).not.toBeChecked()
