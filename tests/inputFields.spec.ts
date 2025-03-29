@@ -14,8 +14,7 @@ test('Update pet type', async ({ page }) => {
     await page.getByRole('button', { name: 'Update' }).click()
     await expect(page.locator('input[name="pettype_name"]').first()).toHaveValue('rabit');
     await page.getByRole('button', { name: 'Edit' }).first().click();
-    await petNameInputField.click()
-    await petNameInputField.clear()
+    await expect(petNameInputField).toHaveValue('rabit')
     await petNameInputField.fill('cat')
     await page.getByRole('button', { name: 'Update' }).click()
     await expect(page.locator('input[name="pettype_name"]').first()).toHaveValue('cat')
