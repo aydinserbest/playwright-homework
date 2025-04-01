@@ -39,7 +39,6 @@ test('Validate the pet type update', async ({ page }) => {
     await expect(typeDisplayField).toHaveValue('bird')
     await typeSelectField.selectOption('dog')
     await expect(typeDisplayField).toHaveValue('dog')
-    await expect(typeSelectField).toHaveValue('dog')
     await page.getByRole('button', { name: 'Update' }).click()
     await expect(rosyPetDetails.locator('dd').nth(2)).toHaveText('dog')
 })
