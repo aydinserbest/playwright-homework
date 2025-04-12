@@ -51,7 +51,7 @@ test.describe('Owners table validations', () => {
     await page.waitForResponse('**/api/owners')
     const expectedPets = ["Leo", "George", "Mulligan", "Freddy"]
     const actualPets: string[] = []
-    const madisonRows = page.locator('tbody > tr').filter({ has: page.getByRole('cell', { name: 'Madison' }) })
+    const madisonRows = page.getByRole('row', { name: 'Madison' })
 
 
     for (const row of await madisonRows.all()) {
