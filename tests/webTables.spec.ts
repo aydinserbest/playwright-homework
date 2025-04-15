@@ -18,27 +18,20 @@ test.describe('Owners table validations', () => {
     await expect(page.getByRole('row', { name: 'Madison' })).toHaveCount(4)
   })
   test('Validate search by Last Name', async ({ page }) => {
-    const testData = [
-      { lastName: 'Black', expectedInTable: true },
-      { lastName: 'Davis', expectedInTable: true },
-      { lastName: 'Es', expectedInTable: true },
-      { lastName: 'Playwright', expectedInTable: false },
-    ]
-    
-    for (const { lastName, expectedInTable } of testData) {
+    const lastNamesToCheck = ['Black', 'Davis', 'Es']
+
+    for (const lastName of lastNamesToCheck) {
       await page.locator('#lastName').fill(lastName)
       await page.getByRole('button', { name: 'Find Owner' }).click()
-    
-      const tableRows = page.locator('tbody > tr')
-    
-      if (expectedInTable) {
-        await expect(tableRows.first()).toContainText(lastName)
-      } else {
-        await expect(
-          page.getByText(`No owners with LastName starting with "${lastName}"`)
-        ).toBeVisible()
-      }
+      await page.waitForResponse(`**/api/owners?lastName=${lastName}`)
+      const targetRows = page.locator('tbody > tr')
+      for(const row of await targetRows.all()) {
+      await expect(row.locator('td').first()).toContainText(lastName)
     }
+  }
+    await page.locator('#lastName').fill('Playwright')
+    await page.getByRole('button', { name: 'Find Owner' }).click()
+    await expect(page.getByText('No owners with LastName starting with "Playwright"')).toBeVisible()
   })
   test('Validate phone number and pet name on the Owner Information page', async ({ page }) => {
     const rowByPhone = page.getByRole('row', { name: '6085552765' })
