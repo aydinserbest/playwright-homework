@@ -18,7 +18,7 @@ test('Add and delete pet type with dialogBoxes', async ({ page }) => {
         expect(dialog.message()).toEqual('Delete the pet type?')
         await dialog.accept()
     })
-    await page.getByRole('table').locator('tr').last().getByRole('button', { name: 'Delete' }).click()
+    await page.getByRole('row', { name: 'pig' }).getByRole('button', { name: 'Delete' }).click()
     await expect(petTypeInputs).toHaveCount(initialInputCount - 1)
     await expect(page.getByRole('table').locator('input').last()).not.toHaveValue('pig')
 })
