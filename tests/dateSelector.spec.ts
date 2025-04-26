@@ -9,7 +9,6 @@ test.beforeEach(async ({ page }) => {
 test('Select the desired date in the calendar', async ({ page }) => {
     await page.getByRole('link', { name: 'Harold Davis' }).click()
     await page.getByRole('button', { name: 'Add New Pet' }).click()
-    await page.waitForResponse('**/pettypes')
     await page.getByLabel('Name').fill('Tom')
     await expect(page.locator('.form-group', { hasText: 'Name' }).locator('.form-control-feedback')).toHaveClass(/.*glyphicon-ok.*/)
     await page.getByRole('button', { name: 'Open calendar' }).click()
@@ -21,10 +20,10 @@ test('Select the desired date in the calendar', async ({ page }) => {
     await expect(page.locator('input[name="birthDate"]')).toHaveValue('2014/05/02')
     await page.getByLabel('Type').selectOption('dog')
     await page.getByRole('button', { name: 'Save Pet' }).click()
-    const targetPet = page.locator('app-pet-list').nth(1)
-    await expect(targetPet).toContainText('Tom')
-    await expect(targetPet).toContainText('2014-05-02')
-    await expect(targetPet).toContainText('dog')
+    const petTomSection = page.locator('app-pet-list', { hasText: 'Tom' })
+    await expect(petTomSection).toContainText('Tom')
+    await expect(petTomSection).toContainText('2014-05-02')
+    await expect(petTomSection).toContainText('dog')
     await page.locator('app-pet-list', { hasText: 'Tom' }).getByRole('button', { name: 'Delete Pet' }).click()
     await expect(page.getByText('Tom')).toHaveCount(0)
 })
@@ -39,16 +38,16 @@ test('Select the dates of visits and validate dates order', async ({ page }) => 
     await page.locator('.mat-calendar-body-active').click()
     const todayDate = new Date()
     const expectedYear = todayDate.getFullYear()
-    const expectedMonth = String(todayDate.getMonth() + 1).padStart(2, '0')
-    const expectedDay = String(todayDate.getDate()).padStart(2, '0')
+    const expectedMonth = todayDate.toLocaleString('en-US', { month: '2-digit' })
+    const expectedDay = todayDate.toLocaleString('en-US', { day: '2-digit' })
     const expectedVisitDateSlashFormat = `${expectedYear}/${expectedMonth}/${expectedDay}`
     await expect(page.locator('input[name="date"]')).toHaveValue(expectedVisitDateSlashFormat)
     await page.locator('#description').fill('dermatologists visit')
     await page.getByRole('button', { name: 'Add Visit' }).click()
     const expectedVisitDateDashFormat = `${expectedYear}-${expectedMonth}-${expectedDay}`
     const visitRow = page
-  .locator('app-pet-list', { hasText: 'Samantha' })
-  .locator('.table-condensed tr')
+        .locator('app-pet-list', { hasText: 'Samantha' })
+        .locator('.table-condensed tr')
     await expect(visitRow.nth(1).locator('td').first()).toHaveText(expectedVisitDateDashFormat)
 
     await page.locator('app-pet-list', { hasText: 'Samantha' }).getByRole('button', { name: 'Add Visit' }).click()
@@ -61,7 +60,7 @@ test('Select the dates of visits and validate dates order', async ({ page }) => 
 
     const expectedPastVisitDateDashFormat = `${expectedPastYear}-${expectedPastMonth}-${expectedPastDay}`
     const expectedMonthYearText = `${expectedPastMonth} ${expectedPastYear}`
-    let calendarMonthYear = await page.locator('.mat-calendar-period-button').textContent()
+    let calendarMonthYear = await page.getByRole('button', { name: 'Choose month and year' }).textContent()
     while (!calendarMonthYear?.includes(expectedMonthYearText)) {
         await page.getByRole('button', { name: 'Previous month' }).click()
         calendarMonthYear = await page.locator('.mat-calendar-period-button').textContent()
@@ -91,8 +90,9 @@ test('Select the dates of visits and validate dates order', async ({ page }) => 
         .nth(1)
         .locator('button', { hasText: 'Delete Visit' })
         .click()
-    await visitRow
-        .nth(2)
+    const updatedVisitRow = page.locator('app-pet-list', { hasText: 'Samantha' }).locator('.table-condensed tr');
+    await updatedVisitRow
+        .nth(1)
         .locator('button', { hasText: 'Delete Visit' })
         .click()
     await expect(
