@@ -8,6 +8,7 @@ test.beforeEach(async ({ page }) => {
 
 test('Select the desired date in the calendar', async ({ page }) => {
     await page.getByRole('link', { name: 'Harold Davis' }).click()
+    await page.waitForResponse('**/owners/*')
     await page.getByRole('button', { name: 'Add New Pet' }).click()
     await page.getByLabel('Name').fill('Tom')
     await expect(page.locator('.form-group', { hasText: 'Name' }).locator('.form-control-feedback')).toHaveClass(/.*glyphicon-ok.*/)
