@@ -32,7 +32,7 @@ test('Select the dates of visits and validate dates order', async ({ page }) => 
     await page.getByRole('link', { name: 'Jean Coleman' }).click()
     await page.locator('app-pet-list', { hasText: 'Samantha' }).getByRole('button', { name: 'Add Visit' }).click()
     await expect(page.getByRole('heading', { name: 'New Visit' })).toBeVisible()
-    const petDataRow = page.locator('.table-striped tr').nth(1)
+    const petDataRow = page.locator('.table-striped > tr')
     await expect(petDataRow.locator('td').nth(0)).toHaveText('Samantha')
     await expect(petDataRow.locator('td').nth(3)).toHaveText('Jean Coleman')
     await page.getByRole('button', { name: 'Open calendar' }).click()
@@ -46,11 +46,10 @@ test('Select the dates of visits and validate dates order', async ({ page }) => 
     await page.locator('#description').fill('dermatologists visit')
     await page.getByRole('button', { name: 'Add Visit' }).click()
     const expectedVisitDateDashFormat = `${expectedYear}-${expectedMonth}-${expectedDay}`
-    const visitRow = page
+    const visitRowsForSamantha = page
         .locator('app-pet-list', { hasText: 'Samantha' })
         .locator('.table-condensed tr')
-    await expect(visitRow.nth(1).locator('td').first()).toHaveText(expectedVisitDateDashFormat)
-
+    await expect(visitRowsForSamantha.filter({ hasText: 'dermatologists visit' })).toContainText(expectedVisitDateDashFormat)
     await page.locator('app-pet-list', { hasText: 'Samantha' }).getByRole('button', { name: 'Add Visit' }).click()
     await page.getByRole('button', { name: 'Open calendar' }).click()
     const fortyFiveDaysAgoDate = new Date(todayDate)
@@ -58,48 +57,40 @@ test('Select the dates of visits and validate dates order', async ({ page }) => 
     const expectedPastYear = fortyFiveDaysAgoDate.getFullYear()
     const expectedPastMonth = (fortyFiveDaysAgoDate.getMonth() + 1).toString().padStart(2, '0')
     const expectedPastDay = fortyFiveDaysAgoDate.getDate().toString()
-
     const expectedPastVisitDateDashFormat = `${expectedPastYear}-${expectedPastMonth}-${expectedPastDay}`
     const expectedMonthYearText = `${expectedPastMonth} ${expectedPastYear}`
     let calendarMonthYear = await page.getByRole('button', { name: 'Choose month and year' }).textContent()
     while (!calendarMonthYear?.includes(expectedMonthYearText)) {
         await page.getByRole('button', { name: 'Previous month' }).click()
         calendarMonthYear = await page.locator('.mat-calendar-period-button').textContent()
-
     }
     await page.getByRole('button', { name: expectedPastDay }).click()
     await page.locator('#description').fill('massage therapy')
     await page.getByRole('button', { name: 'Add Visit' }).click()
 
-    const firstVisitDateText = (await visitRow
-        .nth(1)
-        .locator('td')
-        .first()
+    const currentVisitDateText = (await visitRowsForSamantha
+        .filter({ hasText: 'dermatologists visit' })
+        .locator('td').nth(0)
         .textContent())!
-
-    const secondVisitDateText = (await visitRow
-        .nth(2)
-        .locator('td')
-        .first()
+    const pastVisitDateText = (await visitRowsForSamantha
+        .filter({ hasText: 'massage therapy' })
+        .locator('td').nth(0)
         .textContent())!
-
-    const firstVisitDateSamantha = new Date(firstVisitDateText)
-    const secondVisitDateSamantha = new Date(secondVisitDateText)
-
-    expect(firstVisitDateSamantha > secondVisitDateSamantha).toBeTruthy()
-    await visitRow
-        .nth(1)
+    const currentVisitDateSamantha = new Date(currentVisitDateText)
+    const pastVisitDateSamantha = new Date(pastVisitDateText)
+    expect(currentVisitDateSamantha > pastVisitDateSamantha).toBeTruthy()
+    await visitRowsForSamantha
+        .filter({ hasText: 'dermatologists visit' })
         .locator('button', { hasText: 'Delete Visit' })
         .click()
-    const updatedVisitRow = page.locator('app-pet-list', { hasText: 'Samantha' }).locator('.table-condensed tr');
-    await updatedVisitRow
-        .nth(1)
+    await visitRowsForSamantha
+        .filter({ hasText: 'massage therapy' })
         .locator('button', { hasText: 'Delete Visit' })
         .click()
     await expect(
         page.locator('app-pet-list', { hasText: 'Samantha' }).locator('.table-condensed')
-    ).not.toContainText(expectedVisitDateDashFormat)
+    ).not.toContainText(`${expectedVisitDateDashFormat} dermatologists visit`)
     await expect(
         page.locator('app-pet-list', { hasText: 'Samantha' }).locator('.table-condensed')
-    ).not.toContainText(expectedPastVisitDateDashFormat)
+    ).not.toContainText(`${expectedPastVisitDateDashFormat} massage therapy`)
 })
