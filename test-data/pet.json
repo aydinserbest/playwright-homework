@@ -1,0 +1,110 @@
+[
+  {
+    "firstName": "Kylian",
+    "lastName": "Mbappe",
+    "address": "la liga",
+    "city": "madrid",
+    "telephone": "0000000001",
+    "id": 1001,
+    "pets": [
+      {
+        "id": 3010,
+        "name": "Shadow",
+        "birthDate": "2010-11-17",
+        "type": {
+          "name": "dog",
+          "id": 2000
+        },
+        "ownerId": 1001,
+        "visits": [
+          { "date": "2025-05-01", "description": "checkup 1", "id": 1, "petId": null },
+          { "date": "2025-05-02", "description": "checkup 2", "id": 2, "petId": null },
+          { "date": "2025-05-03", "description": "checkup 3", "id": 3, "petId": null },
+          { "date": "2025-05-04", "description": "checkup 4", "id": 4, "petId": null },
+          { "date": "2025-05-05", "description": "checkup 5", "id": 5, "petId": null },
+          { "date": "2025-05-06", "description": "checkup 6", "id": 6, "petId": null },
+          { "date": "2025-05-07", "description": "checkup 7", "id": 7, "petId": null },
+          { "date": "2025-05-08", "description": "checkup 8", "id": 8, "petId": null },
+          { "date": "2025-05-09", "description": "checkup 9", "id": 9, "petId": null },
+          { "date": "2025-05-10", "description": "checkup 10", "id": 10, "petId": null }
+        ]
+      },
+      {
+        "id": 3011,
+        "name": "Bolt",
+        "birthDate": "2011-06-06",
+        "type": {
+          "name": "dog",
+          "id": 2001
+        },
+        "ownerId": 1001,
+        "visits": []
+      }
+    ]
+  },
+  {
+    "firstName": "Betty",
+    "lastName": "Davis",
+    "address": "638 Cardinal Ave.",
+    "city": "Sun Prairie",
+    "telephone": "6085551749",
+    "id": 1035,
+    "pets": [
+      {
+        "id": 2043,
+        "name": "Basil",
+        "birthDate": "2002-08-06",
+        "type": {
+          "name": "hamster",
+          "id": 1749
+        },
+        "ownerId": 1035,
+        "visits": []
+      },
+      {
+        "id": 2044,
+        "name": "Fluffy",
+        "birthDate": "2011-03-20",
+        "type": {
+          "name": "cat",
+          "id": 1750
+        },
+        "ownerId": 1035,
+        "visits": []
+      },
+      {
+        "id": 2045,
+        "name": "Tiger",
+        "birthDate": "2012-07-11",
+        "type": {
+          "name": "dog",
+          "id": 1751
+        },
+        "ownerId": 1035,
+        "visits": []
+      },
+      {
+        "id": 2046,
+        "name": "Chirpy",
+        "birthDate": "2014-01-30",
+        "type": {
+          "name": "bird",
+          "id": 1752
+        },
+        "ownerId": 1035,
+        "visits": []
+      },
+      {
+        "id": 2047,
+        "name": "Nemo",
+        "birthDate": "2015-05-05",
+        "type": {
+          "name": "fish",
+          "id": 1753
+        },
+        "ownerId": 1035,
+        "visits": []
+      }
+    ]
+  }
+]
