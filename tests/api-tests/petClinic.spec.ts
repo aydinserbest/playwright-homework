@@ -23,7 +23,7 @@ test('Mocked owners list and detail validation', async ({ page }) => {
   const rowsOfOwners = page.locator('table > tbody > tr')
   await expect(rowsOfOwners).toHaveCount(2)
 
-  const firstOwnerRow = page.getByRole('row', { name: 'Kylian Mbappe' })
+  const firstOwnerRow = page.getByRole('row', { name: 'John Walker' })
   await expect(firstOwnerRow.locator('td').nth(4).locator('tr')).toHaveCount(2)
   const name = await firstOwnerRow.locator('td a').textContent()
   const address = await firstOwnerRow.locator('td').nth(1).textContent()
@@ -32,15 +32,15 @@ test('Mocked owners list and detail validation', async ({ page }) => {
   const firstOwnerInfoFromList = { name, address, city, telephone }
   const firstOwnerPets = (await firstOwnerRow.locator('td').nth(4).locator('tr').allTextContents())
     .map(pet => pet.trim())
-  expect(firstOwnerPets).toEqual(['Shadow', 'Bolt'])
+  expect(firstOwnerPets).toEqual(['Max', 'Bella'])
 
-  const secondOwnerRow = page.getByRole('row', { name: 'Betty Davis' })
+  const secondOwnerRow = page.getByRole('row', { name: 'Emily Stone' })
   await expect(secondOwnerRow.locator('td').nth(4).locator('tr')).toHaveCount(5)
   const secondOwnerPets = (await secondOwnerRow.locator('td').nth(4).locator('tr').allTextContents())
     .map(pet => pet.trim())
-  expect(secondOwnerPets).toEqual(['Basil', 'Fluffy', 'Tiger', 'Chirpy', 'Nemo'])
+  expect(secondOwnerPets).toEqual(['Milo', 'Luna', 'Rocky', 'Tweety', 'Goldie'])
 
-  await page.getByRole('link', { name: 'Kylian Mbappe' }).click()
+  await page.getByRole('link', { name: 'John Walker' }).click()
 
   const firstOwnerInformationTable = page.locator('table').first()
   const detailName = await firstOwnerInformationTable.locator('tr').nth(0).locator('td b').textContent()
